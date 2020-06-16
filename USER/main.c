@@ -142,7 +142,6 @@ int main(void)
 	uart_init(115200);     				//初始化串口
 	LED_Init();		        			//初始化LED端口
 	KEY_Init();							//初始化按键
-	BEEP_Init();						//初始化蜂鸣器
 	my_mem_init(SRAMIN);            	//初始化内部内存池
 	my_mem_init(SRAMEX);								//初始化外部内存池
 	my_mem_init(SRAMCCM);	  					    //初始化CCM内存池

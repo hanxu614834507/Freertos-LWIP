@@ -82,7 +82,7 @@ void ETHERNET_NVICConfiguration(void)
 	NVIC_InitTypeDef NVIC_InitStructure;
 	
 	NVIC_InitStructure.NVIC_IRQChannel = ETH_IRQn;  //以太网中断
-	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 0X00;  //中断寄存器组2最高优先级
+	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 0X06;  //中断寄存器组2最高优先级
 	NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0X00;
 	NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
 	NVIC_Init(&NVIC_InitStructure);

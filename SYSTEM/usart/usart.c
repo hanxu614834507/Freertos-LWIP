@@ -103,16 +103,17 @@ void uart_init(u32 bound){
 	USART_Init(USART1, &USART_InitStructure); //初始化串口1
 	
 	USART_Cmd(USART1, ENABLE);  //使能串口1 
-	
-	//USART_ClearFlag(USART1, USART_FLAG_TC);
+	/* CPU的小缺陷：串口配置好，如果直接Send，则第1个字节发送不出去
+		如下语句解决第1个字节无法正确发送出去的问题 */
+	USART_ClearFlag(USART1, USART_FLAG_TC); /* 清发送完成标志，Transmission Complete flag */
 	
 #if EN_USART1_RX	
 	USART_ITConfig(USART1, USART_IT_RXNE, ENABLE);//开启相关中断
 
 	//Usart1 NVIC 配置
 	NVIC_InitStructure.NVIC_IRQChannel = USART1_IRQn;//串口1中断通道
-	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority=7;//抢占优先级7
-	NVIC_InitStructure.NVIC_IRQChannelSubPriority =0;		//子优先级0
+	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority=3;//抢占优先级3
+	NVIC_InitStructure.NVIC_IRQChannelSubPriority =3;		//子优先级3
 	NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;			//IRQ通道使能
 	NVIC_Init(&NVIC_InitStructure);	//根据指定的参数初始化VIC寄存器、
 
