@@ -78,6 +78,7 @@
 #if defined(__ICCARM__) || defined(__CC_ARM) || defined(__GNUC__)
     #include <stdint.h>
     extern uint32_t SystemCoreClock;
+		    extern volatile uint32_t ulHighFrequencyTimerTicks;
 #endif
 
 //断言
@@ -119,20 +120,20 @@
 /*                                FreeRTOS与内存申请有关配置选项                                                */
 /***************************************************************************************************************/
 #define configSUPPORT_DYNAMIC_ALLOCATION        1                       //支持动态内存申请
-#define configTOTAL_HEAP_SIZE					((size_t)(20*1024))     //系统所有总的堆大小
+#define configTOTAL_HEAP_SIZE					((size_t)(40*1024))     //系统所有总的堆大小
 
 /***************************************************************************************************************/
 /*                                FreeRTOS与钩子函数有关的配置选项                                              */
 /***************************************************************************************************************/
-#define configUSE_IDLE_HOOK						1                       //1，使用空闲钩子；0，不使用
+#define configUSE_IDLE_HOOK						0                       //1，使用空闲钩子；0，不使用
 #define configUSE_TICK_HOOK						0                       //1，使用时间片钩子；0，不使用
 
 /***************************************************************************************************************/
 /*                                FreeRTOS与运行时间和任务状态收集有关的配置选项                                 */
 /***************************************************************************************************************/
 #define configGENERATE_RUN_TIME_STATS	        1                       //为1时启用运行时间统计功能
-#define portCONFIGURE_TIMER_FOR_RUN_TIME_STATS()  ConfigureTimeForRunTimeStats()//定时器3提供时间统计的时基，频率为10K，即周期为100us
-#define portGET_RUN_TIME_COUNTER_VALUE()		FreeRTOSRunTimeTicks	//获取时间统计时间值
+#define portCONFIGURE_TIMER_FOR_RUN_TIME_STATS()  (ulHighFrequencyTimerTicks = 0ul)//定时器3提供时间统计的时基，频率为10K，即周期为100us
+#define portGET_RUN_TIME_COUNTER_VALUE()		ulHighFrequencyTimerTicks	//获取时间统计时间值
 
 #define configUSE_TRACE_FACILITY				1                       //为1启用可视化跟踪调试
 #define configUSE_STATS_FORMATTING_FUNCTIONS	1                       //与宏configUSE_TRACE_FACILITY同时为1时会编译下面3个函数
@@ -149,8 +150,8 @@
 /*                                FreeRTOS与软件定时器有关的配置选项                                            */
 /***************************************************************************************************************/
 #define configUSE_TIMERS				        1                               //为1时启用软件定时器
-#define configTIMER_TASK_PRIORITY		        (configMAX_PRIORITIES-1)        //软件定时器优先级
-#define configTIMER_QUEUE_LENGTH		        5                               //软件定时器队列长度
+#define configTIMER_TASK_PRIORITY		        (2)        //软件定时器优先级
+#define configTIMER_QUEUE_LENGTH		        10                               //软件定时器队列长度
 #define configTIMER_TASK_STACK_DEPTH	        (configMINIMAL_STACK_SIZE*2)    //软件定时器任务堆栈大小
 
 /***************************************************************************************************************/

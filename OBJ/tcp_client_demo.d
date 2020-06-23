@@ -74,3 +74,8 @@
 ..\obj\tcp_client_demo.o: ..\LWIP\lwip-1.4.1\src\include\lwip/pbuf.h
 ..\obj\tcp_client_demo.o: ..\HARDWARE\KEY\key.h
 ..\obj\tcp_client_demo.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\string.h
+..\obj\tcp_client_demo.o: ..\OTA\iap.h
+..\obj\tcp_client_demo.o: ..\HARDWARE\YMODEM\ymodem.h
+..\obj\tcp_client_demo.o: ..\HARDWARE\STMFLASH\stmflash.h
+..\obj\tcp_client_demo.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdlib.h
+..\obj\tcp_client_demo.o: ..\HARDWARE\W25Q128\bsp_spi_flash.h

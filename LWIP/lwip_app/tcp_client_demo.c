@@ -8,7 +8,8 @@
 #include "key.h"
 #include "task.h"
 #include <string.h>
-
+#include "iap.h"
+#include "bsp_spi_flash.h"
 //////////////////////////////////////////////////////////////////////////////////	 
 //本程序只供学习使用，未经作者许可，不得用于其它任何用途
 //ALIENTEK STM32F407开发板
@@ -24,12 +25,16 @@
 //修改信息
 //无
 ////////////////////////////////////////////////////////////////////////////////// 	   
- 
-
+#define TRANSHEAD_START_ADD 0x1E0000 //外部flash存储地址
+#define READ_BIN_BUFFER_SIZE 2048
 struct netconn *tcp_clientconn;					//TCP CLIENT网络连接结构体
-u8 tcp_client_recvbuf[TCP_CLIENT_RX_BUFSIZE];	//TCP客户端接收数据缓冲区
+u8 tcp_client_recvbuf[TCP_CLIENT_RX_BUFSIZE];
 u8 *tcp_client_sendbuf="Explorer STM32F407 NETCONN TCP Client send data\r\n";	//TCP客户端发送数据缓冲区
 u8 tcp_client_flag;		//TCP客户端数据发送标志位
+u8 iapbuf[2048];
+u8 update[] =	"C"; //升级标志位
+extern u8 iapbuf[2048];
+size_t DATAS_LENGTH = READ_BIN_BUFFER_SIZE;
 
 //TCP客户端任务
 #define TCPSERVER_PRIO 8
@@ -44,17 +49,16 @@ void tcp_client_thread(void *pvParameters);
 //tcp客户端任务函数
 	void tcp_client_thread(void *pvParameters)
 {
-	
 	u32 data_len = 0;
 	struct pbuf *q;
 	err_t err,recv_err;
 	static ip_addr_t server_ipaddr,loca_ipaddr;
 	static u16_t 		 server_port,loca_port;
-
+	uint32_t  user_app_addr;
 	LWIP_UNUSED_ARG(pvParameters);
 	server_port = REMOTE_PORT;
 	IP4_ADDR(&server_ipaddr, lwipdev.remoteip[0],lwipdev.remoteip[1], lwipdev.remoteip[2],lwipdev.remoteip[3]);
-	
+	user_app_addr = USER_FLASH_FIRST_PAGE_ADDRESS;
 	while (1) 
 	{
 		tcp_clientconn = netconn_new(NETCONN_TCP);  //创建一个TCP链接
@@ -91,9 +95,21 @@ void tcp_client_thread(void *pvParameters);
 						data_len += q->len;  	
 						if(data_len > TCP_CLIENT_RX_BUFSIZE) break; //超出TCP客户端接收数组,跳出	
 					}
-					taskEXIT_CRITICAL();   //开中断
-					data_len=0;  //复制完成后data_len要清零。					
-					printf("%s\r\n",tcp_client_recvbuf);
+					memcpy(iapbuf,tcp_client_recvbuf,sizeof(iapbuf));
+					taskENTER_CRITICAL();							//进入临界区
+						STM_FLASH_Init();
+						STM_FLASH_Erase(user_app_addr);
+						if(STM_FLASH_Write(&user_app_addr,(uint32_t*)iapbuf,( uint16_t ) DATAS_LENGTH/4) == 0)
+						//bsp_sf_WriteBuffer(tcp_client_recvbuf,TRANSHEAD_START_ADD,sizeof (tcp_client_recvbuf));
+						printf("***********DOWN TO FLASH SUCCESS*****************");
+						else
+						{
+						printf("***********DOWN TO FLASH failed*****************");
+						}
+					taskEXIT_CRITICAL();            //退出临界区
+					//printf("%s\r\n",tcp_client_recvbuf);
+					data_len=0;  //复制完成后data_len要清零。
+				taskEXIT_CRITICAL();   //开中断
 					netbuf_delete(recvbuf);
 				}else if(recv_err == ERR_CLSD)  //关闭连接
 				{
@@ -102,6 +118,7 @@ void tcp_client_thread(void *pvParameters);
 					printf("服务器%d.%d.%d.%d断开连接\r\n",lwipdev.remoteip[0],lwipdev.remoteip[1], lwipdev.remoteip[2],lwipdev.remoteip[3]);
 					break;
 				}
+				
 			}
 		}
 	}
@@ -112,9 +129,8 @@ void tcp_client_thread(void *pvParameters);
 //		其他 TCP客户端创建失败
 u8 tcp_client_init(void)
 {
-	u8 res;
   taskENTER_CRITICAL();   	//关中断
-			xTaskCreate((TaskFunction_t)tcp_client_thread, //任务函数
+					xTaskCreate((TaskFunction_t)tcp_client_thread, //任务函数
 											(const char *)"tcp_client_thread", //任务名称
 											(uint16_t)TCPSERVER_STK_SIZE,      //任务堆栈大小
 											(void *)NULL,                      //传递给任务函数的参数
@@ -122,6 +138,6 @@ u8 tcp_client_init(void)
 											(TaskHandle_t *)&TCPTask_Handler); //任务句柄
 	taskEXIT_CRITICAL(); 	//开中断
 	
-	return res;
+	return 0;
 }
 

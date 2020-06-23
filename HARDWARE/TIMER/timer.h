@@ -1,21 +1,41 @@
-#ifndef _TIMER_H
-#define _TIMER_H
-#include "sys.h"
-//////////////////////////////////////////////////////////////////////////////////	 
-//本程序只供学习使用，未经作者许可，不得用于其它任何用途
-//ALIENTEK STM32F407开发板
-//定时器 驱动代码	   
-//正点原子@ALIENTEK
-//技术论坛:www.openedv.com
-//创建日期:2014/6/16
-//版本：V1.0
-//版权所有，盗版必究。
-//Copyright(C) 广州市星翼电子科技有限公司 2014-2024
-//All rights reserved									  
-////////////////////////////////////////////////////////////////////////////////// 	
+#ifndef __BSP_TIME_H
+#define __BSP_TIME_H
 
-void TIM3_Int_Init(u16 arr,u16 psc);
+#include "stm32f4xx_conf.h"
 
-extern volatile unsigned long long FreeRTOSRunTimeTicks;
-void ConfigureTimeForRunTimeStats(void);
+/*
+       SysTick_Config() 函数的形参表示内核时钟多少个周期后触发一次Systick定时中断.
+    -- SystemCoreClock / 1000  表示定时频率为 1000Hz， 也就是定时周期为  1ms
+    -- SystemCoreClock / 500   表示定时频率为 500Hz，  也就是定时周期为  2ms
+    -- SystemCoreClock / 2000  表示定时频率为 2000Hz， 也就是定时周期为  500us
+    -- SystemCoreClock / 20000  表示定时频率为 20000Hz， 也就是定时周期为  50us
+*/   
+
+
+/* 定时器频率，500us一次中断 */
+#define  timerINTERRUPT_FREQUENCY	2000
+
+/* 中断优先级 */
+#define  timerHIGHEST_PRIORITY		2
+
+/* 被系统调用 */
+
+
+extern volatile uint32_t g1msTimerUART1;
+extern volatile uint32_t g1msTimerUART2;
+extern volatile uint32_t g1msTimerUART3;
+extern volatile uint32_t g1msTimerUART4;
+extern volatile uint32_t g1msTimerUART5;
+extern volatile uint32_t g1msTimerUART;
+
+
+
+
+
+void bsp_TimeSysTickHandler (void);
+void bsp_TIM6_Init(void);
+
 #endif
+
+
+

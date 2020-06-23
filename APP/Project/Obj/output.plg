@@ -1,0 +1,33 @@
+<html>
+<body>
+<pre>
+<h1>礦ision Build Log</h1>
+<h2>Project:</h2>
+F:\开发板\STM32F407网络学习板V1.0\例程\LED闪烁例程(裸机版)\Project\project.uvproj
+Project File Date:  10/22/2014
+
+<h2>Output:</h2>
+Build target 'ZQ_LED'
+linking...
+Program Size: Code=716 RO-data=408 RW-data=0 ZI-data=1024  
+FromELF: creating hex file...
+User command #1: CopyHex_Flash.bat
+F:\开发板\STM32F407网络学习板V1.0\例程\LED闪烁例程(裸机版)\Project>copy Flash\Obj\output.hex ..\output(mdk).hex 
+系统找不到指定的路径。
+".\Obj\output.axf" - 0 Error(s), 0 Warning(s).
+Build target 'ZQ_LED'
+linking...
+Program Size: Code=716 RO-data=408 RW-data=0 ZI-data=1024  
+FromELF: creating hex file...
+User command #1: CopyHex_Flash.bat
+F:\开发板\STM32F407网络学习板V1.0\例程\LED闪烁例程(裸机版)\Project>copy Flash\Obj\output.hex ..\output(mdk).hex 
+系统找不到指定的路径。
+".\Obj\output.axf" - 0 Error(s), 0 Warning(s).
+Build target 'ZQ_LED'
+linking...
+Program Size: Code=716 RO-data=408 RW-data=0 ZI-data=1024  
+FromELF: creating hex file...
+User command #1: CopyHex_Flash.bat
+F:\开发板\STM32F407网络学习板V1.0\例程\LED闪烁例程(裸机版)\Project>copy Flash\Obj\output.hex ..\output(mdk).hex 
+系统找不到指定的路径。
+".\Obj\project.axf" - 0 Error(s), 0 Warning(s).

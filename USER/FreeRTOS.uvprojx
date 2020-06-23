@@ -310,7 +310,7 @@
               <OCR_RVCT4>
                 <Type>1</Type>
                 <StartAddress>0x8000000</StartAddress>
-                <Size>0x80000</Size>
+                <Size>0x100000</Size>
               </OCR_RVCT4>
               <OCR_RVCT5>
                 <Type>1</Type>
@@ -359,13 +359,13 @@
             <wLevel>0</wLevel>
             <uThumb>0</uThumb>
             <uSurpInc>0</uSurpInc>
-            <uC99>0</uC99>
+            <uC99>1</uC99>
             <useXO>0</useXO>
             <VariousControls>
               <MiscControls></MiscControls>
               <Define>STM32F40_41xxx,USE_STDPERIPH_DRIVER</Define>
               <Undefine></Undefine>
-              <IncludePath>..\CORE;..\SYSTEM\delay;..\SYSTEM\sys;..\SYSTEM\usart;..\USER;..\FWLIB\inc;..\FreeRTOS\include;..\FreeRTOS\portable\RVDS\ARM_CM4F;..\MALLOC;..\HARDWARE\LED;..\HARDWARE\TIMER;..\HARDWARE\LCD;..\HARDWARE\KEY;..\HARDWARE\BEEP;..\LWIP;..\LWIP\arch;..\LWIP\lwip-1.4.1\src\include\ipv4;..\LWIP\lwip-1.4.1\src\include\netif;..\LWIP\lwip-1.4.1\src\include\lwip;..\LWIP\lwip_app\lwip_comm;..\HARDWARE\ETHERNET;..\FWLIB\STM32F4x7_ETH_Driver\inc;..\LWIP\lwip-1.4.1\src\include;..\LWIP\lwip_app</IncludePath>
+              <IncludePath>..\CORE;..\SYSTEM\delay;..\SYSTEM\sys;..\SYSTEM\usart;..\USER;..\FWLIB\inc;..\FreeRTOS\include;..\FreeRTOS\portable\RVDS\ARM_CM4F;..\MALLOC;..\HARDWARE\LED;..\HARDWARE\TIMER;..\HARDWARE\LCD;..\HARDWARE\KEY;..\HARDWARE\BEEP;..\LWIP;..\LWIP\arch;..\LWIP\lwip-1.4.1\src\include\ipv4;..\LWIP\lwip-1.4.1\src\include\netif;..\LWIP\lwip-1.4.1\src\include\lwip;..\LWIP\lwip_app\lwip_comm;..\HARDWARE\ETHERNET;..\FWLIB\STM32F4x7_ETH_Driver\inc;..\LWIP\lwip-1.4.1\src\include;..\LWIP\lwip_app;..\OTA;..\HARDWARE\STMFLASH;..\HARDWARE\YMODEM;..\EasyFlash\inc;..\HARDWARE\W25Q128;..\SFUD\inc;..\HARDWARE;..\EasyFlash\inc;..\HARDWARE</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -453,6 +453,112 @@
               <FileType>1</FileType>
               <FilePath>..\HARDWARE\ETHERNET\DP83848.c</FilePath>
             </File>
+            <File>
+              <FileName>stmflash.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\HARDWARE\STMFLASH\stmflash.c</FilePath>
+            </File>
+            <File>
+              <FileName>ymodem.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\HARDWARE\YMODEM\ymodem.c</FilePath>
+              <FileOption>
+                <CommonProperty>
+                  <UseCPPCompiler>2</UseCPPCompiler>
+                  <RVCTCodeConst>0</RVCTCodeConst>
+                  <RVCTZI>0</RVCTZI>
+                  <RVCTOtherData>0</RVCTOtherData>
+                  <ModuleSelection>0</ModuleSelection>
+                  <IncludeInBuild>1</IncludeInBuild>
+                  <AlwaysBuild>1</AlwaysBuild>
+                  <GenerateAssemblyFile>2</GenerateAssemblyFile>
+                  <AssembleAssemblyFile>2</AssembleAssemblyFile>
+                  <PublicsOnly>2</PublicsOnly>
+                  <StopOnExitCode>11</StopOnExitCode>
+                  <CustomArgument></CustomArgument>
+                  <IncludeLibraryModules></IncludeLibraryModules>
+                  <ComprImg>1</ComprImg>
+                </CommonProperty>
+                <FileArmAds>
+                  <Cads>
+                    <interw>2</interw>
+                    <Optim>0</Optim>
+                    <oTime>2</oTime>
+                    <SplitLS>2</SplitLS>
+                    <OneElfS>2</OneElfS>
+                    <Strict>2</Strict>
+                    <EnumInt>2</EnumInt>
+                    <PlainCh>2</PlainCh>
+                    <Ropi>2</Ropi>
+                    <Rwpi>2</Rwpi>
+                    <wLevel>2</wLevel>
+                    <uThumb>2</uThumb>
+                    <uSurpInc>2</uSurpInc>
+                    <uC99>2</uC99>
+                    <useXO>2</useXO>
+                    <VariousControls>
+                      <MiscControls></MiscControls>
+                      <Define></Define>
+                      <Undefine></Undefine>
+                      <IncludePath></IncludePath>
+                    </VariousControls>
+                  </Cads>
+                </FileArmAds>
+              </FileOption>
+            </File>
+            <File>
+              <FileName>bsp_spi_flash.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\HARDWARE\W25Q128\bsp_spi_flash.c</FilePath>
+              <FileOption>
+                <CommonProperty>
+                  <UseCPPCompiler>2</UseCPPCompiler>
+                  <RVCTCodeConst>0</RVCTCodeConst>
+                  <RVCTZI>0</RVCTZI>
+                  <RVCTOtherData>0</RVCTOtherData>
+                  <ModuleSelection>0</ModuleSelection>
+                  <IncludeInBuild>1</IncludeInBuild>
+                  <AlwaysBuild>1</AlwaysBuild>
+                  <GenerateAssemblyFile>2</GenerateAssemblyFile>
+                  <AssembleAssemblyFile>2</AssembleAssemblyFile>
+                  <PublicsOnly>2</PublicsOnly>
+                  <StopOnExitCode>11</StopOnExitCode>
+                  <CustomArgument></CustomArgument>
+                  <IncludeLibraryModules></IncludeLibraryModules>
+                  <ComprImg>1</ComprImg>
+                </CommonProperty>
+                <FileArmAds>
+                  <Cads>
+                    <interw>2</interw>
+                    <Optim>0</Optim>
+                    <oTime>2</oTime>
+                    <SplitLS>2</SplitLS>
+                    <OneElfS>2</OneElfS>
+                    <Strict>2</Strict>
+                    <EnumInt>2</EnumInt>
+                    <PlainCh>2</PlainCh>
+                    <Ropi>2</Ropi>
+                    <Rwpi>2</Rwpi>
+                    <wLevel>2</wLevel>
+                    <uThumb>2</uThumb>
+                    <uSurpInc>2</uSurpInc>
+                    <uC99>2</uC99>
+                    <useXO>2</useXO>
+                    <VariousControls>
+                      <MiscControls></MiscControls>
+                      <Define></Define>
+                      <Undefine></Undefine>
+                      <IncludePath></IncludePath>
+                    </VariousControls>
+                  </Cads>
+                </FileArmAds>
+              </FileOption>
+            </File>
+            <File>
+              <FileName>tools.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\HARDWARE\tools.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -527,6 +633,16 @@
               <FileName>stm32f4x7_eth.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\FWLIB\STM32F4x7_ETH_Driver\src\stm32f4x7_eth.c</FilePath>
+            </File>
+            <File>
+              <FileName>stm32f4xx_flash.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\FWLIB\src\stm32f4xx_flash.c</FilePath>
+            </File>
+            <File>
+              <FileName>stm32f4xx_spi.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\FWLIB\src\stm32f4xx_spi.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -812,6 +928,114 @@
               <FileName>sys_arch.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\LWIP\arch\sys_arch.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>OTA</GroupName>
+          <Files>
+            <File>
+              <FileName>app.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\OTA\app.c</FilePath>
+            </File>
+            <File>
+              <FileName>iap.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\OTA\iap.c</FilePath>
+              <FileOption>
+                <CommonProperty>
+                  <UseCPPCompiler>2</UseCPPCompiler>
+                  <RVCTCodeConst>0</RVCTCodeConst>
+                  <RVCTZI>0</RVCTZI>
+                  <RVCTOtherData>0</RVCTOtherData>
+                  <ModuleSelection>0</ModuleSelection>
+                  <IncludeInBuild>0</IncludeInBuild>
+                  <AlwaysBuild>0</AlwaysBuild>
+                  <GenerateAssemblyFile>2</GenerateAssemblyFile>
+                  <AssembleAssemblyFile>2</AssembleAssemblyFile>
+                  <PublicsOnly>2</PublicsOnly>
+                  <StopOnExitCode>11</StopOnExitCode>
+                  <CustomArgument></CustomArgument>
+                  <IncludeLibraryModules></IncludeLibraryModules>
+                  <ComprImg>1</ComprImg>
+                </CommonProperty>
+                <FileArmAds>
+                  <Cads>
+                    <interw>2</interw>
+                    <Optim>0</Optim>
+                    <oTime>2</oTime>
+                    <SplitLS>2</SplitLS>
+                    <OneElfS>2</OneElfS>
+                    <Strict>2</Strict>
+                    <EnumInt>2</EnumInt>
+                    <PlainCh>2</PlainCh>
+                    <Ropi>2</Ropi>
+                    <Rwpi>2</Rwpi>
+                    <wLevel>2</wLevel>
+                    <uThumb>2</uThumb>
+                    <uSurpInc>2</uSurpInc>
+                    <uC99>2</uC99>
+                    <useXO>2</useXO>
+                    <VariousControls>
+                      <MiscControls></MiscControls>
+                      <Define></Define>
+                      <Undefine></Undefine>
+                      <IncludePath></IncludePath>
+                    </VariousControls>
+                  </Cads>
+                </FileArmAds>
+              </FileOption>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>SFUD</GroupName>
+          <Files>
+            <File>
+              <FileName>sfud_port.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\SFUD\port\sfud_port.c</FilePath>
+            </File>
+            <File>
+              <FileName>sfud.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\SFUD\src\sfud.c</FilePath>
+            </File>
+            <File>
+              <FileName>sfud_sfdp.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\SFUD\src\sfud_sfdp.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>EASYFLASH</GroupName>
+          <Files>
+            <File>
+              <FileName>ef_port.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\EasyFlash\port\ef_port.c</FilePath>
+            </File>
+            <File>
+              <FileName>easyflash.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\EasyFlash\src\easyflash.c</FilePath>
+            </File>
+            <File>
+              <FileName>ef_utils.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\EasyFlash\src\ef_utils.c</FilePath>
+            </File>
+            <File>
+              <FileName>ef_env.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\EasyFlash\src\ef_env.c</FilePath>
+            </File>
+            <File>
+              <FileName>ef_iap.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\EasyFlash\src\ef_iap.c</FilePath>
             </File>
           </Files>
         </Group>

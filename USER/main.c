@@ -20,53 +20,67 @@
 #include "ethernetif.h" 
 #include "lwip/tcpip.h" 
 #include "tcp_client_demo.h"
+#include "bsp_spi_flash.h"
+#include "iap.h"
 /************************************************
- ALIENTEK 探索者STM32F407开发板 FreeRTOS实验19-1
- FreeRTOS空闲任务钩子函数实验-库函数版本
- 技术支持：www.openedv.com
- 淘宝店铺：http://eboard.taobao.com 
- 关注微信公众平台微信号："正点原子"，免费获取STM32资料。
- 广州市星翼电子科技有限公司  
- 作者：正点原子 @ALIENTEK
+  文 件 名   : main.c
+  版 本 号   : 初稿
+  作    者   : 韩旭
+  生成日期   : 2020年6月16日
+  最近修改   :
+  功能描述   : 主程序模块
+  函数列表   :
+  修改历史   :
+  1.日    期   : 2020年6月16日
+    作    者   : 韩旭
+    修改内容   : 创建文件
 ************************************************/
 
 //任务优先级
-#define START_TASK_PRIO		1
+#define START_TASK_PRIO		(tskIDLE_PRIORITY)
 //任务堆栈大小	
-#define START_STK_SIZE 		256  
+#define START_STK_SIZE 		2*2048
 //任务句柄
 TaskHandle_t StartTask_Handler;
 //任务函数
 void start_task(void *pvParameters);
 
 //任务优先级
-#define TASK1_TASK_PRIO		2
+#define TASK1_TASK_PRIO		(tskIDLE_PRIORITY+1)
 //任务堆栈大小	
-#define TASK1_STK_SIZE 		256  
+#define TASK1_STK_SIZE 		1024  
 //任务句柄
 TaskHandle_t Task1Task_Handler;
 //任务函数
 void task1_task(void *pvParameters);
 
 //任务优先级
-#define TASK2_TASK_PRIO 3
+#define TASK2_TASK_PRIO 	(tskIDLE_PRIORITY+1)
 //任务堆栈大小	
-#define TASK2_STK_SIZE  256 
+#define TASK2_STK_SIZE 		1024
 //任务句柄
 TaskHandle_t Task2Task_Handler;
 //任务函数
 void task2_task(void *pvParameters);
-
-//二值信号量句柄
 SemaphoreHandle_t BinarySemaphore;	//二值信号量句柄
-
+////任务优先级
+//#define TASK3_TASK_PRIO 3
+////任务堆栈大小	
+//#define TASK3_STK_SIZE  256 
+////任务句柄
+//TaskHandle_t Task3Task_Handler;
+////任务函数
+//void task3_task(void *pvParameters);
+typedef  void (*pFunction)(void);
+pFunction Jump_To_Application;
+uint32_t JumpAddress;
 //用于命令解析用的命令值
 #define LED1ON	1
 #define LED1OFF	2
 #define BEEPON	3
 #define BEEPOFF	4
 #define COMMANDERR	0XFF
-
+#define TRANSHEAD_START_ADD 0x1E0000 //外部flash存储地址
 //进入低功耗模式前需要处理的事情
 void BeforeEnterSleep(void)
 {
@@ -94,20 +108,20 @@ void AfterExitSleep(void)
 }
 
 //空闲任务钩子函数
-void vApplicationIdleHook(void)
-{
-	__disable_irq();
-	__dsb(portSY_FULL_READ_WRITE );
-	__isb(portSY_FULL_READ_WRITE );
-	
-	BeforeEnterSleep();		//进入睡眠模式之前需要处理的事情
-	__wfi();				//进入睡眠模式
-	AfterExitSleep();		//退出睡眠模式之后需要处理的事情
-	
-	__dsb(portSY_FULL_READ_WRITE );
-	__isb(portSY_FULL_READ_WRITE );
-	__enable_irq();
-}
+//void vApplicationIdleHook(void)
+//{
+//	__disable_irq();
+//	__dsb(portSY_FULL_READ_WRITE );
+//	__isb(portSY_FULL_READ_WRITE );
+//	
+//	BeforeEnterSleep();		//进入睡眠模式之前需要处理的事情
+//	__wfi();				//进入睡眠模式
+//	AfterExitSleep();		//退出睡眠模式之后需要处理的事情
+//	
+//	__dsb(portSY_FULL_READ_WRITE );
+//	__isb(portSY_FULL_READ_WRITE );
+//	__enable_irq();
+//}
 
 //将字符串中的小写字母转换为大写
 //str:要转换的字符串
@@ -173,8 +187,6 @@ int main(void)
 void start_task(void *pvParameters)
 {
     taskENTER_CRITICAL();           //进入临界区
-	
-	//创建二值信号量
 	BinarySemaphore=xSemaphoreCreateBinary();	
     //创建TASK1任务
     xTaskCreate((TaskFunction_t )task1_task,             
@@ -184,12 +196,12 @@ void start_task(void *pvParameters)
                 (UBaseType_t    )TASK1_TASK_PRIO,        
                 (TaskHandle_t*  )&Task1Task_Handler);   
     //创建TASK2任务
-//    xTaskCreate((TaskFunction_t)task2_task,
-//									(const char *)"task2_task",
-//									(uint16_t)TASK2_STK_SIZE,
-//									(void *)NULL,
-//									(UBaseType_t)TASK2_TASK_PRIO,
-//									(TaskHandle_t *)&Task2Task_Handler);
+    xTaskCreate((TaskFunction_t)task2_task,
+									(const char *)"task2_task",
+									(uint16_t)TASK2_STK_SIZE,
+									(void *)NULL,
+									(UBaseType_t)TASK2_TASK_PRIO,
+									(TaskHandle_t *)&Task2Task_Handler);
 
     vTaskDelete(StartTask_Handler); //删除开始任务
     taskEXIT_CRITICAL();            //退出临界区
@@ -200,19 +212,55 @@ void task1_task(void *pvParameters)
 {
 	while(1)
 	{
-		LED0=!LED0;
+		LED1=!LED1;
+		//printf("tocuh");
+		//LED0=!LED0;
     vTaskDelay(500);             	//延时500ms，也就是500个时钟节拍	
 	}
 }
 
 
-void task2_task(void *pvParameters)
+void task2_task(void *pvParameters)//在线更新iap任务
 {
+	
 	while(1)
 	{
-		
+	if(KEY_Scan(0))
+		{
+			if(KEY0 == 0)
+			{
+					taskENTER_CRITICAL(); //关中断
+					taskENTER_CRITICAL();							//进入临界区
+				
+				printf("您未按下升级按键KEY_UP!设备将尝试正常运行! \r\n");
+					printf("- - - - 正在跳转 - - - - \r\n");
+				/* Check if valid stack address (RAM address) then jump to user application */
+	  /* 检查栈顶地址信息是否合法，合法则跳转至app */
+				if(((*(vu32*)(USER_FLASH_FIRST_PAGE_ADDRESS+4))&0xFF000000)==0x08000000)//判断是否为0X08XXXXXX.
+		{
+				if (((*(vu32*)USER_FLASH_FIRST_PAGE_ADDRESS) & 0x2FFE0000 ) == 0x20000000)
+			{
+					printf("正常运行中! \r\n");
+					/* Jump to user application */
+					JumpAddress = *(__IO uint32_t*) (USER_FLASH_FIRST_PAGE_ADDRESS + 4);
+					Jump_To_Application = (pFunction) JumpAddress;
+					/* Initialize user application's Stack Pointer */
+					__set_MSP(*(__IO uint32_t*) USER_FLASH_FIRST_PAGE_ADDRESS);
+					Jump_To_Application();
+					/* do nothing */
+			}
+		}
+	//如果flash栈信息中没有app代码，则打印反馈信息
+			else
+		{
+			printf("FLASH中没有app程序! \r\n");
+		}
+		taskEXIT_CRITICAL();            //退出临界区
+					taskEXIT_CRITICAL();   //开中断
+		}
+				
 	}	
-	
+}
 }	
 
 //DataProcess_task函数

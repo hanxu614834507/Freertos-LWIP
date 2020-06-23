@@ -7,24 +7,9 @@
 #include "task.h"
 #endif
 //////////////////////////////////////////////////////////////////////////////////  
-//本程序只供学习使用，未经作者许可，不得用于其它任何用途
-//ALIENTEK STM32F407开发板
-//使用SysTick的普通计数模式对延迟进行管理(支持OS)
-//包括delay_us,delay_ms
-//正点原子@ALIENTEK
-//技术论坛:www.openedv.com
-//创建日期:2014/5/2
-//版本：V1.3
-//版权所有，盗版必究。
-//Copyright(C) 广州市星翼电子科技有限公司 2014-2024
-//All rights reserved
-//********************************************************************************
-//修改说明
-////////////////////////////////////////////////////////////////////////////////// 
 
 static u8  fac_us=0;							//us延时倍乘数			   
 static u16 fac_ms=0;							//ms延时倍乘数,在os下,代表每个节拍的ms数
-
  
 extern void xPortSysTickHandler(void);
  
@@ -47,7 +32,7 @@ void delay_init(u8 SYSCLK)
  	SysTick_CLKSourceConfig(SysTick_CLKSource_HCLK); 
 	fac_us=SYSCLK;							//不论是否使用OS,fac_us都需要使用
 	reload=SYSCLK;							//每秒钟的计数次数 单位为M	   
-	reload*=1000000/configTICK_RATE_HZ;		//根据delay_ostickspersec设定溢出时间
+	reload*=1000000/configTICK_RATE_HZ;		//根据configTICK_RATE_HZ设定溢出时间
 											//reload为24位寄存器,最大值:16777216,在168M下,约合0.0998s左右	
 	fac_ms=1000/configTICK_RATE_HZ;			//代表OS可以延时的最少单位	   
 	SysTick->CTRL|=SysTick_CTRL_TICKINT_Msk;//开启SYSTICK中断
@@ -102,6 +87,12 @@ void delay_xms(u32 nms)
 }
 
 			 
+
+void retry_delay_100us()
+
+{
+    delay_us(100);
+}
 
 
 

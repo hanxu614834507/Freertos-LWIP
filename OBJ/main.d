@@ -92,3 +92,7 @@
 ..\obj\main.o: ..\LWIP\lwip-1.4.1\src\include\lwip/netifapi.h
 ..\obj\main.o: ..\LWIP\lwip-1.4.1\src\include\lwip/timers.h
 ..\obj\main.o: ..\LWIP\lwip_app\tcp_client_demo.h
+..\obj\main.o: ..\HARDWARE\W25Q128\bsp_spi_flash.h
+..\obj\main.o: ..\OTA\iap.h
+..\obj\main.o: ..\HARDWARE\YMODEM\ymodem.h
+..\obj\main.o: ..\HARDWARE\STMFLASH\stmflash.h
